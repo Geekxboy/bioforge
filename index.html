@@ -130,6 +130,44 @@
     </section>
   </main>
 
+  <div id="iconModal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle" class="modal-title">Select an Icon</h3>
+          <p class="modal-subtitle">Choose from over 3,000+ Simple Icons and built-in icons</p>
+        </div>
+        <button type="button" class="modal-close" id="closeIconModalBtn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-search-wrapper">
+        <div class="search-input-container">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="iconSearchInput" placeholder="Search icons (e.g. Discord, Spotify, Bluesky, React)..." autocomplete="off">
+          <button type="button" id="clearIconSearchBtn" class="search-clear-btn" hidden aria-label="Clear search">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-categories" id="iconCategoryTabs">
+        <button type="button" class="category-tab active" data-category="all">All Icons</button>
+        <button type="button" class="category-tab" data-category="popular">Popular & Social</button>
+        <button type="button" class="category-tab" data-category="dev">Dev & Tech</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="iconGrid" class="icon-grid"></div>
+        <div id="iconGridEmpty" class="icon-grid-empty" hidden>
+          <p>No icons found matching "<span id="searchQueryText"></span>"</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span id="iconCountBadge" class="icon-count-badge">Loading Simple Icons...</span>
+        <button type="button" class="button button-ghost" id="cancelIconModalBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>

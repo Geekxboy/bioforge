@@ -1,14 +1,3 @@
-const ICON_OPTIONS = [
-  ["github", "GitHub"],
-  ["globe", "Globe"],
-  ["mail", "Email"],
-  ["linkedin", "LinkedIn"],
-  ["youtube", "YouTube"],
-  ["instagram", "Instagram"],
-  ["twitter", "X / Twitter"],
-  ["link", "Generic link"]
-];
-
 const fields = {
   name: document.getElementById("nameInput"),
   username: document.getElementById("usernameInput"),
@@ -20,6 +9,23 @@ const fields = {
   background: document.getElementById("backgroundInput"),
   accent: document.getElementById("accentInput")
 };
+
+// Modal Elements
+const modalOverlay = document.getElementById("iconModal");
+const iconSearchInput = document.getElementById("iconSearchInput");
+const clearIconSearchBtn = document.getElementById("clearIconSearchBtn");
+const closeIconModalBtn = document.getElementById("closeIconModalBtn");
+const cancelIconModalBtn = document.getElementById("cancelIconModalBtn");
+const iconGrid = document.getElementById("iconGrid");
+const iconGridEmpty = document.getElementById("iconGridEmpty");
+const searchQueryText = document.getElementById("searchQueryText");
+const iconCountBadge = document.getElementById("iconCountBadge");
+const iconCategoryTabs = document.getElementById("iconCategoryTabs");
+
+let activeModalLinkIndex = null;
+let currentCategory = "all";
+let searchDebounceTimer = null;
+const MAX_RENDER_COUNT = 160;
 
 function syncFieldsFromState() {
   fields.name.value = profile.name;
@@ -61,12 +67,14 @@ function renderLinksEditor() {
           <span>URL</span>
           <input type="url" data-link-url="${index}" value="${escapeHtml(link.url)}" placeholder="https://...">
         </label>
-        <label class="field">
+        <div class="field">
           <span>Icon</span>
-          <select data-link-icon="${index}">
-            ${ICON_OPTIONS.map(([value, label]) => `<option value="${value}" ${link.icon === value ? "selected" : ""}>${label}</option>`).join("")}
-          </select>
-        </label>
+          <button type="button" class="icon-picker-btn" data-open-icon-modal="${index}" title="Click to choose icon">
+            <span class="icon-picker-preview">${getIconSvg(link.icon)}</span>
+            <span class="icon-picker-name">${escapeHtml(getIconTitle(link.icon))}</span>
+            <span class="icon-picker-arrow">▾</span>
+          </button>
+        </div>
         <button class="remove-link" type="button" data-remove-link="${index}" aria-label="Remove link">×</button>
       </div>
     `;
@@ -89,11 +97,9 @@ function renderLinksEditor() {
     });
   });
 
-  root.querySelectorAll("[data-link-icon]").forEach(select => {
-    select.addEventListener("change", e => {
-      profile.links[Number(e.target.dataset.linkIcon)].icon = e.target.value;
-      saveProfile();
-      renderPreview();
+  root.querySelectorAll("[data-open-icon-modal]").forEach(button => {
+    button.addEventListener("click", () => {
+      openIconModal(Number(button.dataset.openIconModal));
     });
   });
 
@@ -106,6 +112,138 @@ function renderLinksEditor() {
     });
   });
 }
+
+// Icon Popover Modal Functions
+async function openIconModal(linkIndex) {
+  activeModalLinkIndex = linkIndex;
+  modalOverlay.classList.add("show");
+  modalOverlay.setAttribute("aria-hidden", "false");
+
+  iconSearchInput.value = "";
+  clearIconSearchBtn.hidden = true;
+  currentCategory = "all";
+
+  // Reset category tabs UI
+  iconCategoryTabs.querySelectorAll(".category-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.category === "all");
+  });
+
+  iconCountBadge.textContent = "Loading icons...";
+  await loadSimpleIcons();
+  renderIconGrid();
+
+  setTimeout(() => {
+    iconSearchInput.focus();
+  }, 100);
+}
+
+function closeIconModal() {
+  modalOverlay.classList.remove("show");
+  modalOverlay.setAttribute("aria-hidden", "true");
+  activeModalLinkIndex = null;
+}
+
+function renderIconGrid() {
+  const query = iconSearchInput.value.trim();
+  const currentIconSlug = activeModalLinkIndex !== null ? profile.links[activeModalLinkIndex].icon : "";
+  const filtered = filterIcons(query, currentCategory);
+
+  iconGrid.innerHTML = "";
+
+  if (filtered.length === 0) {
+    searchQueryText.textContent = query;
+    iconGridEmpty.hidden = false;
+    iconCountBadge.textContent = "0 icons found";
+    return;
+  }
+
+  iconGridEmpty.hidden = true;
+
+  const displayList = filtered.slice(0, MAX_RENDER_COUNT);
+
+  if (filtered.length > MAX_RENDER_COUNT) {
+    iconCountBadge.textContent = `Showing ${displayList.length} of ${filtered.length.toLocaleString()} icons (type to refine search)`;
+  } else {
+    iconCountBadge.textContent = `${filtered.length.toLocaleString()} icon${filtered.length === 1 ? "" : "s"} available`;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  displayList.forEach(item => {
+    const card = document.createElement("div");
+    card.className = `icon-card${item.slug === currentIconSlug ? " selected" : ""}`;
+    card.dataset.slug = item.slug;
+    card.title = item.title;
+
+    const hexColor = item.hex ? `#${item.hex}` : "#58a6ff";
+
+    card.innerHTML = `
+      <div class="icon-card-svg">${getIconSvg(item.slug)}</div>
+      <span class="icon-card-name">${escapeHtml(item.title)}</span>
+      <span class="icon-card-dot" style="background:${hexColor}" title="Brand Color"></span>
+    `;
+
+    card.addEventListener("click", () => selectIcon(item.slug, item.title));
+    fragment.appendChild(card);
+  });
+
+  iconGrid.appendChild(fragment);
+
+  // Scroll selected icon into view
+  const selectedElem = iconGrid.querySelector(".icon-card.selected");
+  if (selectedElem) {
+    selectedElem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+}
+
+function selectIcon(slug, title) {
+  if (activeModalLinkIndex !== null && profile.links[activeModalLinkIndex]) {
+    profile.links[activeModalLinkIndex].icon = slug;
+    saveProfile();
+    renderLinksEditor();
+    renderPreview();
+    closeIconModal();
+    showToast(`Updated icon to "${title}"`);
+  }
+}
+
+// Modal Event Listeners
+iconSearchInput.addEventListener("input", () => {
+  clearIconSearchBtn.hidden = !iconSearchInput.value.trim();
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(renderIconGrid, 60);
+});
+
+clearIconSearchBtn.addEventListener("click", () => {
+  iconSearchInput.value = "";
+  clearIconSearchBtn.hidden = true;
+  renderIconGrid();
+  iconSearchInput.focus();
+});
+
+iconCategoryTabs.addEventListener("click", e => {
+  const btn = e.target.closest(".category-tab");
+  if (!btn) return;
+  iconCategoryTabs.querySelectorAll(".category-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  currentCategory = btn.dataset.category;
+  renderIconGrid();
+});
+
+closeIconModalBtn.addEventListener("click", closeIconModal);
+cancelIconModalBtn.addEventListener("click", closeIconModal);
+
+modalOverlay.addEventListener("click", e => {
+  if (e.target === modalOverlay) {
+    closeIconModal();
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && modalOverlay.classList.contains("show")) {
+    closeIconModal();
+  }
+});
 
 Object.entries(fields).forEach(([key, input]) => {
   input.addEventListener("input", () => updateState(key, input.value));
@@ -153,5 +291,11 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
+// Initial state sync and background icons load
 syncFieldsFromState();
 renderPreview();
+loadSimpleIcons().then(() => {
+  // Re-render link editor and preview once Simple Icons metadata/paths are fully loaded
+  renderLinksEditor();
+  renderPreview();
+});

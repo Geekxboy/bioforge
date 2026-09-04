@@ -98,15 +98,16 @@ body {
 .link-icon svg {
   width: 18px;
   height: 18px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.link-icon svg[stroke]:not([stroke="none"]) {
+  fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.links a:first-child .link-icon svg {
-  fill: currentColor;
-  stroke: none;
 }
 
 .site {
