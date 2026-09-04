@@ -319,13 +319,55 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 
 document.getElementById("downloadBtn").addEventListener("click", downloadProfile);
 
+// Import Profile Config Handler
+const importConfigInput = document.getElementById("importConfigInput");
+
+importConfigInput.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!file.name.toLowerCase().endsWith(".json")) {
+    showToast("Please select a valid .json file (e.g. profile.json)");
+    importConfigInput.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = event => {
+    try {
+      const content = event.target.result;
+      const parsed = parseProfileConfig(content);
+      profile = normalizeProfile(parsed);
+      saveProfile();
+      syncFieldsFromState();
+      renderPreview();
+      showToast(`Loaded profile from ${file.name}`);
+    } catch (err) {
+      console.error("Failed to import profile config:", err);
+      showToast(`Could not parse ${file.name}`);
+    }
+    importConfigInput.value = "";
+  };
+  reader.readAsText(file);
+});
+
+function parseProfileConfig(text) {
+  // Extract JSON object substring {...}
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error("No valid JSON profile configuration object found");
+  }
+
+  return JSON.parse(jsonMatch[0]);
+}
+
 document.getElementById("configBtn").addEventListener("click", () => {
-  downloadText("profile.js", buildConfigJs(), "text/javascript");
-  showToast("Downloaded profile.js");
+  downloadText("profile.json", buildConfigJson(), "application/json");
+  showToast("Downloaded profile.json");
 });
 
 document.getElementById("copyConfigBtn").addEventListener("click", async () => {
-  await navigator.clipboard.writeText(buildConfigJs());
+  await navigator.clipboard.writeText(buildConfigJson());
   showToast("Config copied");
 });
 

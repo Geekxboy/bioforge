@@ -237,14 +237,9 @@ ${site}
 `;
 }
 
-function buildConfigJs() {
+function buildConfigJson() {
   const copy = structuredClone(profile);
-  return `// BioForge profile configuration
-// Edit this file to update your profile.
-// Regenerate index.html/style.css with BioForge when needed.
-
-const profile = ${JSON.stringify(copy, null, 2)};
-`;
+  return JSON.stringify(copy, null, 2);
 }
 
 function downloadText(filename, content, type = "text/plain") {
@@ -266,7 +261,7 @@ async function downloadProfile() {
   const zip = new JSZip();
   zip.file("index.html", buildProfileHtml());
   zip.file("style.css", buildProfileCss());
-  zip.file("profile.js", buildConfigJs());
+  zip.file("profile.json", buildConfigJson());
 
   const avatarInfo = getAvatarInfo();
   if (avatarInfo.type === "data") {
@@ -275,7 +270,7 @@ async function downloadProfile() {
     zip.file("avatar.svg", DEFAULT_AVATAR_SVG);
   }
 
-  zip.file("README.md", `# ${profile.name || "My Bio Profile"}\n\nGenerated with BioForge.\n\nEdit profile.js and regenerate the site when you want to make changes.\n`);
+  zip.file("README.md", `# ${profile.name || "My Bio Profile"}\n\nGenerated with BioForge.\n\nEdit profile.json and regenerate the site when you want to make changes.\n`);
 
   const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);

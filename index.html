@@ -125,8 +125,13 @@
             <h2>Portable config</h2>
           </div>
         </div>
-        <p>Download a small <code>profile.js</code> file so you can update your profile later without rebuilding the page.</p>
-        <button class="button button-secondary full" id="configBtn" type="button">Download profile.js</button>
+        <p>Import or download a small <code>profile.json</code> file to restore and update your profile at any time.</p>
+        <button class="button button-primary full" id="configBtn" type="button">Download profile.json</button>
+        <label class="button button-secondary full" for="importConfigInput" style="display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; margin-top: 10px;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Import profile.json</span>
+        </label>
+        <input type="file" id="importConfigInput" accept=".json" style="display:none">
         <button class="button button-ghost full" id="copyConfigBtn" type="button">Copy config</button>
       </section>
     </aside>

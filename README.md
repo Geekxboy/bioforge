@@ -11,10 +11,11 @@ A tiny, dependency-free bio profile generator built with vanilla HTML, CSS and J
 - Browser-local persistence
 - Standalone `index.html` + `style.css` generation
 - One-click ZIP packaging
-- Portable `profile.js` configuration
-- Per-link icons from a built-in SVG icon set
-- No framework
-- No build step
+- Portable `profile.json` configuration
+- Import `profile.json` file for updating
+- Per-link icons
+- No frameworks
+- No build steps
 - GitHub Pages friendly
 
 ## Run locally
@@ -29,7 +30,7 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-## Deploy to GitHub Pages
+## Deploy to GitHub Pages After Download the Zip File
 
 Push the repository to GitHub, then enable GitHub Pages from:
 
@@ -41,13 +42,12 @@ Select the branch containing `index.html`.
 
 1. Edit your profile in BioForge.
 2. Download the generated files.
-3. Put `index.html` and `style.css` in your profile repository.
-4. Optionally keep `profile.js` as the editable source of truth.
+3. Put `index.html` and `style.css` in your profile repository. (Upload `avatar.png` if you used the upload feature)
+4. Optionally keep `profile.json` as the editable source of truth.
 5. Regenerate whenever the profile changes.
 
 ## Roadmap
 
-- Import profile.js / JSON
 - More themes
 - Font selection
 - Projects section
@@ -68,7 +68,7 @@ Each link has an `icon` property:
 }
 ```
 
-Built-in icons currently include `github`, `globe`, `mail`, `linkedin`, `youtube`, `instagram`, `twitter`, and `link`.
+Built-in icons currently include `github`, `globe`, `mail`, `linkedin`, `youtube`, `instagram`, `twitter`, and `link`. Additional icons are imported through Simple Icons
 
 ## Generated package
 
@@ -78,7 +78,8 @@ Click **Download ZIP** to receive:
 my-bio-profile.zip
 ├── index.html
 ├── style.css
-├── profile.js
+├── profile.json
+├── avatar.png (Only if using the upload image feature)
 └── README.md
 ```
 
