@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple vanilla HTML, CSS and JavaScript bio profile generator.">
+  <title>BioForge — Bio Profile Generator</title>
+  <link rel="stylesheet" href="css/generator.css">
+  <link rel="stylesheet" href="css/preview.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <a class="brand" href="./">BioForge</a>
+      <span class="tagline">Simple bio pages, generated as simple code.</span>
+    </div>
+    <div class="header-actions">
+      <button class="button button-ghost" id="resetBtn" type="button">Reset</button>
+      <button class="button button-primary" id="downloadBtn" type="button">Download ZIP</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel editor-panel">
+      <section>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01</p>
+            <h2>Profile</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Name</span>
+          <input id="nameInput" type="text" placeholder="Jane Doe">
+        </label>
+
+        <label class="field">
+          <span>Username</span>
+          <input id="usernameInput" type="text" placeholder="janedoe">
+        </label>
+
+        <label class="field">
+          <span>Bio</span>
+          <textarea id="bioInput" rows="3" placeholder="Designer, developer, and maker of things."></textarea>
+        </label>
+
+        <label class="field">
+          <span>Location <small>(optional)</small></span>
+          <input id="locationInput" type="text" placeholder="Florida, USA">
+        </label>
+
+        <label class="field">
+          <span>Website <small>(optional)</small></span>
+          <input id="websiteInput" type="url" placeholder="https://example.com">
+        </label>
+
+        <label class="field">
+          <span>Avatar URL <small>(optional)</small></span>
+          <input id="avatarInput" type="url" placeholder="https://.../avatar.jpg">
+        </label>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02</p>
+            <h2>Links</h2>
+          </div>
+          <button class="text-button" id="addLinkBtn" type="button">+ Add link</button>
+        </div>
+        <div id="linksEditor" class="links-editor"></div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03</p>
+            <h2>Appearance</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Theme</span>
+          <select id="themeInput">
+            <option value="geek">Geek</option>
+            <option value="terminal">Terminal</option>
+            <option value="minimal">Minimal</option>
+            <option value="glass">Glass</option>
+          </select>
+        </label>
+
+        <div class="color-grid">
+          <label class="field">
+            <span>Background</span>
+            <input id="backgroundInput" type="color">
+          </label>
+          <label class="field">
+            <span>Accent</span>
+            <input id="accentInput" type="color">
+          </label>
+        </div>
+      </section>
+
+      <section class="config-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">04</p>
+            <h2>Portable config</h2>
+          </div>
+        </div>
+        <p>Download a small <code>profile.js</code> file so you can update your profile later without rebuilding the page.</p>
+        <button class="button button-secondary full" id="configBtn" type="button">Download profile.js</button>
+        <button class="button button-ghost full" id="copyConfigBtn" type="button">Copy config</button>
+      </section>
+    </aside>
+
+    <section class="preview-area">
+      <div class="preview-toolbar">
+        <div>
+          <span class="preview-title">Live preview</span>
+          <span class="preview-note">Updates as you type</span>
+        </div>
+        <button class="button button-ghost" id="copyHtmlBtn" type="button">Copy HTML</button>
+      </div>
+
+      <div class="preview-frame">
+        <div id="profilePreview" class="profile-preview"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/generator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
