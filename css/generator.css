@@ -143,65 +143,65 @@ button {
 
 /* Avatar Upload UI */
 .avatar-input-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 8px;
 }
 
 .avatar-preview-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--border);
-  background: var(--panel-2);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	overflow: hidden;
+	border: 2px solid var(--border);
+	background: var(--panel-2);
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .avatar-preview-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .avatar-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
 }
 
 .avatar-upload-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  padding: 8px 12px;
-  font-size: 12px;
-  margin: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	padding: 8px 12px;
+	font-size: 12px;
+	margin: 0;
 }
 
 .avatar-url-details {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 6px;
+	font-size: 12px;
+	color: var(--muted);
+	margin-top: 6px;
 }
 
 .avatar-url-details summary {
-  cursor: pointer;
-  user-select: none;
+	cursor: pointer;
+	user-select: none;
 }
 
 .avatar-url-details summary:hover {
-  color: var(--text);
+	color: var(--text);
 }
 
 .avatar-url-details input {
-  margin-top: 8px;
+	margin-top: 8px;
 }
 
 input,
@@ -710,6 +710,161 @@ code {
 .icon-count-badge {
 	font-size: 12px;
 	color: var(--muted);
+}
+
+.custom-color-picker {
+	position: fixed;
+	z-index: 999999;
+
+	width: 230px;
+	padding: 10px;
+
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.16);
+
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(0.96);
+	transform-origin: top left;
+
+	transition:
+		opacity 0.12s ease,
+		transform 0.12s ease,
+		visibility 0.12s;
+}
+
+.custom-color-picker.open {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1);
+}
+
+.cp-sv {
+	position: relative;
+
+	width: 100%;
+	height: 160px;
+
+	border-radius: 7px;
+	overflow: hidden;
+
+	cursor: crosshair;
+
+	background: hsl(0 100% 50%);
+}
+
+.cp-white,
+.cp-black {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.cp-white {
+	background: linear-gradient(to right, #fff, transparent);
+}
+
+.cp-black {
+	background: linear-gradient(to top, #000, transparent);
+}
+
+.cp-cursor {
+	position: absolute;
+
+	width: 14px;
+	height: 14px;
+
+	border: 2px solid white;
+	border-radius: 50%;
+
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+
+	transform: translate(-50%, -50%);
+
+	pointer-events: none;
+}
+
+.cp-hue {
+	position: relative;
+
+	height: 12px;
+	margin: 10px 0;
+
+	border-radius: 10px;
+
+	cursor: pointer;
+
+	background: linear-gradient(
+		to right,
+		#f00,
+		#ff0,
+		#0f0,
+		#0ff,
+		#00f,
+		#f0f,
+		#f00
+	);
+}
+
+.cp-hue-cursor {
+	position: absolute;
+
+	top: 50%;
+	left: 0;
+
+	width: 16px;
+	height: 16px;
+
+	border: 2px solid white;
+	border-radius: 50%;
+
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+
+	transform: translate(-50%, -50%);
+
+	pointer-events: none;
+}
+
+.cp-bottom {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.cp-preview {
+	width: 34px;
+	height: 34px;
+
+	flex: 0 0 34px;
+
+	border-radius: 6px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.cp-hex {
+	width: 100%;
+	height: 34px;
+
+	padding: 0 8px;
+
+	border: 1px solid #ddd;
+	border-radius: 6px;
+
+	font:
+		13px ui-monospace,
+		SFMono-Regular,
+		Menlo,
+		monospace;
+
+	text-transform: uppercase;
+	outline: none;
+}
+
+.cp-hex:focus {
+	border-color: #888;
 }
 
 @media (max-width: 850px) {
