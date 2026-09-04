@@ -55,10 +55,26 @@
           <input id="websiteInput" type="url" placeholder="https://example.com">
         </label>
 
-        <label class="field">
-          <span>Avatar URL <small>(optional)</small></span>
-          <input id="avatarInput" type="url" placeholder="https://.../avatar.jpg">
-        </label>
+        <div class="field avatar-upload-field">
+          <span>Avatar <small>(optional)</small></span>
+          <div class="avatar-input-group">
+            <div class="avatar-preview-box">
+              <img id="avatarPreviewImg" src="assets/default-avatar.svg" alt="Avatar preview">
+            </div>
+            <div class="avatar-controls">
+              <label class="button button-secondary avatar-upload-btn" for="avatarFileInput">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Upload Image</span>
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+              <button type="button" class="button button-ghost" id="removeAvatarBtn" hidden>Remove</button>
+            </div>
+          </div>
+          <details class="avatar-url-details">
+            <summary>Or use image URL</summary>
+            <input id="avatarInput" type="url" placeholder="https://.../avatar.jpg">
+          </details>
+        </div>
       </section>
 
       <section>

@@ -158,15 +158,42 @@ body {
   return "";
 }
 
+const DEFAULT_AVATAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <rect width="240" height="240" rx="120" fill="#151b23"/>
+  <circle cx="120" cy="92" r="44" fill="#8b949e"/>
+  <path d="M45 216c8-48 35-73 75-73s67 25 75 73" fill="#8b949e"/>
+</svg>`;
+
+function getAvatarInfo() {
+  const src = profile.avatar.trim();
+  if (!src) {
+    return { type: "default", filename: "avatar.svg", src: "avatar.svg" };
+  }
+  if (src.startsWith("data:")) {
+    const match = src.match(/^data:(image\/[a-zA-Z0-9\+\-\.]+);base64,(.+)$/);
+    if (match) {
+      const mimeType = match[1];
+      const base64Data = match[2];
+      let ext = "png";
+      if (mimeType.includes("jpeg") || mimeType.includes("jpg")) ext = "jpg";
+      else if (mimeType.includes("webp")) ext = "webp";
+      else if (mimeType.includes("svg")) ext = "svg";
+      else if (mimeType.includes("gif")) ext = "gif";
+      const filename = `avatar.${ext}`;
+      return { type: "data", filename, base64Data, src: filename };
+    }
+  }
+  return { type: "url", src };
+}
+
 function buildProfileHtml() {
   const links = profile.links
     .filter(x => x.title.trim() && x.url.trim())
     .map(x => `      <a class="profile-link" href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer"><span class="link-icon">${getIconSvg(x.icon)}</span><span>${x.title}</span></a>`)
     .join("\n");
 
-  const avatar = profile.avatar.trim()
-    ? `    <img class="avatar" src="${profile.avatar.trim()}" alt="${profile.name || "Profile avatar"}">`
-    : "";
+  const avatarInfo = getAvatarInfo();
+  const avatar = `    <img class="avatar" src="${escapeHtml(avatarInfo.src)}" alt="${escapeHtml(profile.name || "Profile avatar")}">`;
 
   const username = profile.username.trim()
     ? `    <p class="username">@${profile.username.replace(/^@/, "")}</p>`
@@ -240,6 +267,14 @@ async function downloadProfile() {
   zip.file("index.html", buildProfileHtml());
   zip.file("style.css", buildProfileCss());
   zip.file("profile.js", buildConfigJs());
+
+  const avatarInfo = getAvatarInfo();
+  if (avatarInfo.type === "data") {
+    zip.file(avatarInfo.filename, avatarInfo.base64Data, { base64: true });
+  } else if (avatarInfo.type === "default") {
+    zip.file("avatar.svg", DEFAULT_AVATAR_SVG);
+  }
+
   zip.file("README.md", `# ${profile.name || "My Bio Profile"}\n\nGenerated with BioForge.\n\nEdit profile.js and regenerate the site when you want to make changes.\n`);
 
   const blob = await zip.generateAsync({ type: "blob" });

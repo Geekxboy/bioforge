@@ -27,17 +27,29 @@ let currentCategory = "all";
 let searchDebounceTimer = null;
 const MAX_RENDER_COUNT = 160;
 
+// Avatar Upload Elements
+const avatarFileInput = document.getElementById("avatarFileInput");
+const removeAvatarBtn = document.getElementById("removeAvatarBtn");
+const avatarPreviewImg = document.getElementById("avatarPreviewImg");
+
 function syncFieldsFromState() {
   fields.name.value = profile.name;
   fields.username.value = profile.username;
   fields.bio.value = profile.bio;
   fields.location.value = profile.location;
   fields.website.value = profile.website;
-  fields.avatar.value = profile.avatar;
+  fields.avatar.value = profile.avatar.startsWith("data:") ? "" : profile.avatar;
   fields.theme.value = profile.theme;
   fields.background.value = profile.colors.background;
   fields.accent.value = profile.colors.accent;
+  syncAvatarUI();
   renderLinksEditor();
+}
+
+function syncAvatarUI() {
+  const avatarSrc = profile.avatar.trim() || "assets/default-avatar.svg";
+  avatarPreviewImg.src = avatarSrc;
+  removeAvatarBtn.hidden = !profile.avatar.trim();
 }
 
 function updateState(key, value) {
@@ -45,6 +57,9 @@ function updateState(key, value) {
     profile.colors[key] = value;
   } else {
     profile[key] = value;
+  }
+  if (key === "avatar") {
+    syncAvatarUI();
   }
   saveProfile();
   renderPreview();
@@ -243,6 +258,42 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && modalOverlay.classList.contains("show")) {
     closeIconModal();
   }
+});
+
+// Avatar File Upload Handlers
+avatarFileInput.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    showToast("Please select a valid image file");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    showToast("Image file size should be under 5MB");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = event => {
+    profile.avatar = event.target.result;
+    saveProfile();
+    syncAvatarUI();
+    renderPreview();
+    showToast("Avatar image uploaded");
+  };
+  reader.readAsDataURL(file);
+});
+
+removeAvatarBtn.addEventListener("click", () => {
+  profile.avatar = "";
+  avatarFileInput.value = "";
+  fields.avatar.value = "";
+  saveProfile();
+  syncAvatarUI();
+  renderPreview();
+  showToast("Avatar removed");
 });
 
 Object.entries(fields).forEach(([key, input]) => {

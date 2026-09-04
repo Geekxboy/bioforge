@@ -24,9 +24,8 @@ function renderPreview() {
       </a>`)
     .join("");
 
-  const avatar = profile.avatar.trim()
-    ? `<img class="profile-avatar" src="${escapeHtml(profile.avatar.trim())}" alt="${escapeHtml(profile.name || "Profile avatar")}" onerror="this.style.visibility='hidden'">`
-    : `<div class="profile-avatar" aria-hidden="true"></div>`;
+  const avatarSrc = profile.avatar.trim() || "assets/default-avatar.svg";
+  const avatar = `<img class="profile-avatar" src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(profile.name || "Profile avatar")}" onerror="this.src='assets/default-avatar.svg'">`;
 
   const meta = [profile.location.trim()].filter(Boolean).map(escapeHtml).join("");
 
