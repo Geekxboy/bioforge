@@ -1,3 +1,27 @@
+const themeDefaults = {
+  geek: {
+    name: "Geek",
+    background: "#0d1117",
+    accent: "#58a6ff"
+  },
+  terminal: {
+    name: "Terminal",
+    background: "#0d1117",
+    accent: "#58ff6e"
+  },
+  minimal: {
+    name: "Minimal",
+    background: "#f7f7f5",
+    accent: "#58a6ff"
+  },
+  glass: {
+    name: "Glass",
+    background: "#58a6ff",
+    accent: "#7758ff"
+  }
+};
+
+
 const fields = {
   name: document.getElementById("nameInput"),
   username: document.getElementById("usernameInput"),
@@ -21,6 +45,9 @@ const iconGridEmpty = document.getElementById("iconGridEmpty");
 const searchQueryText = document.getElementById("searchQueryText");
 const iconCountBadge = document.getElementById("iconCountBadge");
 const iconCategoryTabs = document.getElementById("iconCategoryTabs");
+
+const restoreBackgroundBtn = document.querySelector(".restore-background");
+const restoreAccentBtn = document.querySelector(".restore-accent");
 
 let activeModalLinkIndex = null;
 let currentCategory = "all";
@@ -53,6 +80,18 @@ function syncAvatarUI() {
 }
 
 function updateState(key, value) {
+  if (key === "theme") {
+    if (fields.background.value === themeDefaults[profile.theme].background) {
+      fields.background.value = themeDefaults[value].background;
+      profile.colors["background"] = themeDefaults[value].background;
+    } 
+    
+    if (fields.accent.value === themeDefaults[profile.theme].accent) {
+      fields.accent.value = themeDefaults[value].accent;
+      profile.colors["accent"] = themeDefaults[value].accent;
+    }
+  }
+
   if (key === "background" || key === "accent") {
     profile.colors[key] = value;
   } else {
@@ -62,6 +101,7 @@ function updateState(key, value) {
     syncAvatarUI();
   }
   saveProfile();
+  themeColorCheck();
   renderPreview();
 }
 
@@ -387,9 +427,61 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
+// Theme Options and Color Restore Buttons
+function loadThemeOptions() {
+  Object.entries(themeDefaults).forEach(([key, value]) => {
+    const option = document.createElement("option");
+    option.value = key.toLowerCase();
+    option.textContent = value.name;
+    fields.theme.appendChild(option);
+  });
+}
+
+function themeColorCheck() {
+  const theme = fields.theme.value;
+  const defaultBackground = themeDefaults[theme].background;
+  const defaultAccent = themeDefaults[theme].accent;
+
+  if (fields.background.value.toLowerCase() === defaultBackground.toLowerCase()) {
+    restoreBackgroundBtn.classList.add("hide");
+  } else {
+    restoreBackgroundBtn.classList.remove("hide");
+  }
+
+  if (fields.accent.value.toLowerCase() === defaultAccent.toLowerCase()) {
+    restoreAccentBtn.classList.add("hide");
+  } else {
+    restoreAccentBtn.classList.remove("hide");
+  }
+}
+
+restoreBackgroundBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  fields.background.value = themeDefaults[fields.theme.value].background;
+  fields.background.dispatchEvent(
+    new Event("change", {
+      bubbles: true,
+    }),
+  );
+});
+
+restoreAccentBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  fields.accent.value = themeDefaults[fields.theme.value].accent;
+  fields.accent.dispatchEvent(
+    new Event("change", {
+      bubbles: true,
+    }),
+  );
+});
+
+// Load theme options into the select dropdown
+loadThemeOptions();
+
 // Initial state sync and background icons load
 syncFieldsFromState();
 renderPreview();
+themeColorCheck();
 loadSimpleIcons().then(() => {
   // Re-render link editor and preview once Simple Icons metadata/paths are fully loaded
   renderLinksEditor();
