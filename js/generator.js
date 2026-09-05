@@ -136,7 +136,7 @@ body { background: #f7f7f5; color: #161616; }
 .profile { text-align: left; }
 .avatar { width: 88px; height: 88px; border: 0; }
 .bio, .meta { color: #686863; }
-.links a { color: #161616; background: #fff; border-color: #d9d9d2; border-radius: 6px; }
+.links a { color: #161616; background: #fff; border-color: #d9d9d2; border-radius: 6px; align-items: start; justify-content: start; }
 `;
   if (theme === "glass") return `
 body {

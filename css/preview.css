@@ -129,7 +129,7 @@
 
 /* Minimal */
 .theme-minimal {
-	background: #f7f7f5;
+	background: var(--profile-bg);
 	color: #161616;
 	border-color: #deded8;
 }
@@ -157,6 +157,8 @@
 	color: #161616;
 	background: #fff;
 	border-radius: 6px;
+  align-items: start;
+  justify-content: start;
 }
 .theme-minimal .profile-link:hover {
 	border-color: var(--profile-accent);
@@ -167,7 +169,7 @@
 	background:
 		radial-gradient(
 			circle at 15% 10%,
-			color-mix(in srgb, var(--profile-accent) 24%, transparent),
+			color-mix(in srgb, var(--profile-bg) 24%, transparent),
 			transparent 32%
 		),
 		radial-gradient(

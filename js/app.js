@@ -73,24 +73,27 @@ function renderLinksEditor() {
     const wrapper = document.createElement("div");
     wrapper.className = "link-editor";
     wrapper.innerHTML = `
-      <div class="link-editor-row">
-        <label class="field">
-          <span>Label</span>
-          <input type="text" data-link-title="${index}" value="${escapeHtml(link.title)}" placeholder="GitHub">
-        </label>
+    
+      <div class="link-editor-container">
+        <div class="link-editor-row">
+          <div class="field">
+            <span>Icon</span>
+            <button type="button" class="icon-picker-btn" data-open-icon-modal="${index}" title="Click to choose icon">
+              <span class="icon-picker-preview">${getIconSvg(link.icon)}</span>
+              <span class="icon-picker-name">${escapeHtml(getIconTitle(link.icon))}</span>
+              <span class="icon-picker-arrow">▾</span>
+            </button>
+          </div>
+          <label class="field">
+            <span>Label</span>
+            <input type="text" data-link-title="${index}" value="${escapeHtml(link.title)}" placeholder="GitHub">
+          </label>
+          <button class="remove-link" type="button" data-remove-link="${index}" title="Remove link" aria-label="Remove link">×</button>
+        </div>
         <label class="field">
           <span>URL</span>
           <input type="url" data-link-url="${index}" value="${escapeHtml(link.url)}" placeholder="https://...">
         </label>
-        <div class="field">
-          <span>Icon</span>
-          <button type="button" class="icon-picker-btn" data-open-icon-modal="${index}" title="Click to choose icon">
-            <span class="icon-picker-preview">${getIconSvg(link.icon)}</span>
-            <span class="icon-picker-name">${escapeHtml(getIconTitle(link.icon))}</span>
-            <span class="icon-picker-arrow">▾</span>
-          </button>
-        </div>
-        <button class="remove-link" type="button" data-remove-link="${index}" aria-label="Remove link">×</button>
       </div>
     `;
     root.appendChild(wrapper);
