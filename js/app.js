@@ -1,6 +1,6 @@
 const themeDefaults = {
-  geek: {
-    name: "Geek",
+  default: {
+    name: "Default",
     background: "#0d1117",
     accent: "#58a6ff"
   },

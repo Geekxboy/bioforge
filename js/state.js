@@ -11,7 +11,7 @@ const DEFAULT_PROFILE = {
     { title: "Facebook", url: "https://facebook.com/", icon: "facebook" },
     { title: "Email", url: "mailto:hello@example.com", icon: "mail" }
   ],
-  theme: "geek",
+  theme: "default",
   colors: {
     background: "#0d1117",
     accent: "#58a6ff"
