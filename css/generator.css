@@ -76,6 +76,7 @@ button {
 .header-actions {
 	display: flex;
 	gap: 8px;
+	margin-right: 50px;
 }
 
 .workspace {
@@ -951,9 +952,11 @@ span.field-note {
 @media (max-width: 560px) {
 	.app-header {
 		flex-wrap: wrap;
+		height: 115px;
 	}
 	.header-actions {
 		width: 100%;
+		margin-right: 0;
 	}
 	.header-actions .button {
 		flex: 1;

@@ -177,7 +177,7 @@ const DEFAULT_AVATAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="240" 
   <path d="M45 216c8-48 35-73 75-73s67 25 75 73" fill="#8b949e"/>
 </svg>`;
 
-const FOOTER_TEXT = `Built with <span style="color: #ff6b6b;">&hearts;</span> using <a href="https://bioforge.dev" target="_blank" rel="noopener noreferrer">BioForge</a>`;
+const FOOTER_TEXT = `Built with <span style="color: #ff6b6b;">&hearts;</span> using <a href="https://geekxboy.github.io/bioforge/" target="_blank" rel="noopener noreferrer">BioForge</a>`;
 
 function getAvatarInfo() {
   const src = profile.avatar.trim();
