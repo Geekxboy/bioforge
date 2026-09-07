@@ -7,14 +7,16 @@ const DEFAULT_PROFILE = {
   avatar: "",
   links: [
     { title: "GitHub", url: "https://github.com/", icon: "github" },
-    { title: "My Website", url: "https://example.com/", icon: "globe" },
+    { title: "Instagram", url: "https://instagram.com/", icon: "instagram" },
+    { title: "Facebook", url: "https://facebook.com/", icon: "facebook" },
     { title: "Email", url: "mailto:hello@example.com", icon: "mail" }
   ],
   theme: "geek",
   colors: {
     background: "#0d1117",
     accent: "#58a6ff"
-  }
+  },
+  includeBuiltWith: true
 };
 
 let profile = loadProfile();
@@ -41,7 +43,8 @@ function normalizeProfile(value) {
           url: String(x.url || ""),
           icon: String(x.icon || "link")
         }))
-      : base.links
+      : base.links,
+    includeBuiltWith: Boolean(value.includeBuiltWith)
   };
 }
 

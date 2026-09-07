@@ -31,7 +31,8 @@ const fields = {
   avatar: document.getElementById("avatarInput"),
   theme: document.getElementById("themeInput"),
   background: document.getElementById("backgroundInput"),
-  accent: document.getElementById("accentInput")
+  accent: document.getElementById("accentInput"),
+  builtWith: document.getElementById("includeBuiltWith")
 };
 
 // Modal Elements
@@ -69,6 +70,7 @@ function syncFieldsFromState() {
   fields.theme.value = profile.theme;
   fields.background.value = profile.colors.background;
   fields.accent.value = profile.colors.accent;
+  fields.builtWith.checked = profile.includeBuiltWith;
   syncAvatarUI();
   renderLinksEditor();
 }
@@ -342,6 +344,12 @@ removeAvatarBtn.addEventListener("click", () => {
 Object.entries(fields).forEach(([key, input]) => {
   input.addEventListener("input", () => updateState(key, input.value));
   input.addEventListener("change", () => updateState(key, input.value));
+});
+
+fields.builtWith.addEventListener("change", () => {
+  profile.includeBuiltWith = fields.builtWith.checked;
+  saveProfile();
+  renderPreview();
 });
 
 document.getElementById("addLinkBtn").addEventListener("click", () => {

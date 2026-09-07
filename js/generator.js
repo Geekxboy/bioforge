@@ -15,12 +15,14 @@ html, body {
 
 body {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
   padding: 24px;
   background: var(--profile-bg);
   color: var(--profile-text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 }
 
 .profile {
@@ -119,6 +121,17 @@ body {
   font-size: 13px;
 }
 
+.built-with {
+	margin-top: 60px;
+	font-size: 15px;
+	color: var(--profile-muted);
+}
+
+.built-with a {
+  color: var(--profile-accent);
+  text-decoration: none;
+}
+
 /* ${profile.theme} theme */
 ${themeCss(profile.theme)}
 `;
@@ -163,6 +176,8 @@ const DEFAULT_AVATAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="240" 
   <circle cx="120" cy="92" r="44" fill="#8b949e"/>
   <path d="M45 216c8-48 35-73 75-73s67 25 75 73" fill="#8b949e"/>
 </svg>`;
+
+const FOOTER_TEXT = `Built with <span style="color: #ff6b6b;">&hearts;</span> using <a href="https://bioforge.dev" target="_blank" rel="noopener noreferrer">BioForge</a>`;
 
 function getAvatarInfo() {
   const src = profile.avatar.trim();
@@ -211,6 +226,10 @@ function buildProfileHtml() {
     ? `    <a class="site" href="${safeUrl(profile.website)}" target="_blank" rel="noopener noreferrer">${profile.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>`
     : "";
 
+  const footer = profile.includeBuiltWith
+    ? `    <footer class="built-with">${FOOTER_TEXT}</footer>`
+    : "";
+
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -232,6 +251,7 @@ ${links}
     </nav>
 ${site}
   </main>
+${footer}
 </body>
 </html>
 `;

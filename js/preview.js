@@ -41,6 +41,8 @@ function renderPreview() {
         ${links ? `<nav class="profile-links" aria-label="Profile links">${links}</nav>` : ""}
         ${profile.website.trim() ? `<a class="profile-site" href="${escapeHtml(safeUrl(profile.website))}" target="_blank" rel="noopener noreferrer">${escapeHtml(profile.website.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a>` : ""}
       </div>
+
+      ${profile.includeBuiltWith ? `<footer class="profile-footer">${FOOTER_TEXT}</footer>` : ""}
     </article>
   `;
 }

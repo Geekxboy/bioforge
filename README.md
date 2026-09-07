@@ -30,9 +30,9 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-## Deploy to GitHub Pages After Download the Zip File
+## Deploy to GitHub Pages After Downloading the Zip File
 
-Push the repository to GitHub, then enable GitHub Pages from:
+Push the code/repository to GitHub, then enable GitHub Pages from:
 
 **Repository Settings → Pages → Deploy from a branch**
 
@@ -68,7 +68,7 @@ Each link has an `icon` property:
 }
 ```
 
-Built-in icons currently include `github`, `globe`, `mail`, `linkedin`, `youtube`, `instagram`, `twitter`, and `link`. Additional icons are imported through Simple Icons
+Built-in icons currently include `github`, `globe`, `mail`, `linkedin`, `youtube`, `instagram`, `twitter`, `facebook`, and `link`. Additional icons are imported from Simple Icons
 
 ## Generated package
 
