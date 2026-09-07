@@ -5,12 +5,13 @@
 	--profile-accent: #58a6ff;
 	width: 100%;
 	min-height: 100%;
-	padding: 52px 28px;
+	padding: 52px 28px 15px;
 	background: var(--profile-bg);
 	color: var(--profile-text);
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
+	flex-direction: column;
 	font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	overflow: hidden;
@@ -19,6 +20,7 @@
 .profile-card {
 	width: min(100%, 540px);
 	text-align: center;
+	padding-bottom: 37px;
 }
 
 .profile-avatar {
