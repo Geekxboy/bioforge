@@ -215,7 +215,7 @@ function buildProfileHtml() {
     : "";
 
   const bio = profile.bio.trim()
-    ? `    <p class="bio">${profile.bio.replaceAll("\n", "<br>")}</p>`
+    ? `    <p class="bio">${fixHtml(escapeJavascript(profile.bio.replaceAll("\n", "<br>")))}</p>`
     : "";
 
   const meta = profile.location.trim()
@@ -235,7 +235,7 @@ function buildProfileHtml() {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="${profile.bio || profile.name}">
+  <meta name="description" content="${escapeHtml(profile.bio || profile.name)}">
   <title>${profile.name || "Profile"}</title>
   <link rel="stylesheet" href="style.css">
 </head>

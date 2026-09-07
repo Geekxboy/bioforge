@@ -7,6 +7,18 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
+function escapeJavascript(value = "") {
+  return String(value)
+    .replaceAll("<script", "&lt;script")
+    .replaceAll("script>", "script&gt;")
+}
+
+function fixHtml(brokenHtml) {
+    const div = document.createElement('div');
+    div.innerHTML = brokenHtml;
+    return div.innerHTML;
+}
+
 function safeUrl(value = "") {
   const url = String(value).trim();
   if (!url) return "";
@@ -29,14 +41,14 @@ function renderPreview() {
 
   const meta = [profile.location.trim()].filter(Boolean).map(escapeHtml).join("");
 
-  preview.innerHTML = `
+  preview.innerHTML = fixHtml(`
     <article class="profile-page theme-${escapeHtml(profile.theme)}"
       style="--profile-bg:${escapeHtml(profile.colors.background)};--profile-accent:${escapeHtml(profile.colors.accent)}">
       <div class="profile-card">
         ${avatar}
         <h1 class="profile-name">${escapeHtml(profile.name || "Your Name")}</h1>
         ${profile.username.trim() ? `<p class="profile-username">@${escapeHtml(profile.username.replace(/^@/, ""))}</p>` : ""}
-        ${profile.bio.trim() ? `<p class="profile-bio">${escapeHtml(profile.bio)}</p>` : ""}
+        ${profile.bio.trim() ? `<p class="profile-bio">${escapeJavascript(profile.bio)}</p>` : ""}
         ${meta ? `<p class="profile-meta">${meta}</p>` : ""}
         ${links ? `<nav class="profile-links" aria-label="Profile links">${links}</nav>` : ""}
         ${profile.website.trim() ? `<a class="profile-site" href="${escapeHtml(safeUrl(profile.website))}" target="_blank" rel="noopener noreferrer">${escapeHtml(profile.website.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a>` : ""}
@@ -44,5 +56,7 @@ function renderPreview() {
 
       ${profile.includeBuiltWith ? `<footer class="profile-footer">${FOOTER_TEXT}</footer>` : ""}
     </article>
-  `;
+    
+    
+  `);
 }
